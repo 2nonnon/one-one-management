@@ -4,6 +4,7 @@
     "useDefineForClassFields": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "types": ["element-plus/global"],
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,

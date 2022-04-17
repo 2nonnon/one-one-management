@@ -18,6 +18,17 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    'vue/script-setup-uses-vars': 'error'
-  }
+    'vue/script-setup-uses-vars': 'error',
+    'vue/multi-word-component-names': ['error', {
+      ignores: ['index']
+    }]
+  },
+  overrides: [
+    {
+      files: ['src/api/**/*.ts'],
+      rules: {
+        camelcase: 'off'
+      }
+    }
+  ]
 }
