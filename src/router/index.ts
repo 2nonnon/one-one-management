@@ -4,11 +4,16 @@ import productRoutes from './modules/product'
 import mediaRoutes from './modules/media'
 import orderRoutes from './modules/order'
 import permissionRoutes from './modules/permission'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: AppLayout,
+    meta: {
+      title: '首页'
+    },
     children: [
       {
         path: '',
@@ -36,6 +41,14 @@ const router = createRouter({
   },
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach(() => {
+  nprogress.start()
+})
+
+router.afterEach(() => {
+  nprogress.done()
 })
 
 export default router
