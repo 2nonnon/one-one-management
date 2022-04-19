@@ -9,14 +9,18 @@
     "lint": "eslint ./src/**/*.{js,jsx,vue,ts,tsx} --fix"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^1.1.4",
     "@types/minimist": "^1.2.2",
     "axios": "^0.26.1",
     "element-plus": "^2.1.9",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.0.13",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@types/node": "^17.0.24",
+    "@types/nprogress": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "@vitejs/plugin-vue": "^2.3.1",
