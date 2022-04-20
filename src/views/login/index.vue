@@ -57,7 +57,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ILoginForm } from '../../api/types/login'
 import { signin } from '../../api/login'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
 
@@ -79,7 +81,12 @@ const handlleSubmit = async (formEl: FormInstance | undefined) => {
   }
   loading.value = true
   const data = await signin(loginForm)
-  console.log(data)
+  loading.value = false
+  if (data) {
+    router.replace({
+      path: '/'
+    })
+  }
 }
 </script>
 
