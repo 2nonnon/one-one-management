@@ -15,7 +15,6 @@ export const piniaPlugin = (options: PiniaOption) => {
     const data = getStorage(`${options?.key ?? piniaKey}-${store.$id}`)
 
     store.$subscribe(() => {
-      console.log(store)
       setStorage(`${options?.key ?? piniaKey}-${store.$id}`, toRaw(store.$state))
     })
 

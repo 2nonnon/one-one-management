@@ -57,8 +57,11 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ILoginForm } from '../../api/types/login'
 import { signin } from '../../api/login'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from '../../store/store'
 
+const store = useStore()
+const route = useRoute()
 const router = useRouter()
 const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
@@ -83,8 +86,15 @@ const handlleSubmit = async (formEl: FormInstance | undefined) => {
   const data = await signin(loginForm)
   loading.value = false
   if (data) {
+    store.setUsername(loginForm.username)
+    store.setAccessToken(data.accessToken)
+
+    let redirect = route.query.redirect
+    if (typeof redirect !== 'string') {
+      redirect = '/'
+    }
     router.replace({
-      path: '/'
+      path: redirect
     })
   }
 }

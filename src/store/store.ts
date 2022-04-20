@@ -5,7 +5,8 @@ export const useStore = defineStore(Names.Store, {
   state: () => {
     return {
       isCollapse: false,
-      username: ''
+      username: '',
+      accessToken: ''
     }
   },
   getters: {
@@ -17,6 +18,9 @@ export const useStore = defineStore(Names.Store, {
     },
     setUsername (username: string) {
       this.username = username
+    },
+    setAccessToken (accessToken: string) {
+      this.accessToken = accessToken
     }
   }
 })

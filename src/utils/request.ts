@@ -1,13 +1,19 @@
 import axios
 // , { AxiosRequestConfig }
   from 'axios'
+import { useStore } from '../store/store'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL
 })
 
+const store = useStore()
+
 request.interceptors.request.use(function (config) {
   // 统一设置用户token
+  if (store.accessToken) {
+    config.headers = Object.assign(config.headers ?? {}, { Authorization: `Bearer ${store.accessToken}` })
+  }
   return config
 }, function (error) {
   return Promise.reject(error)

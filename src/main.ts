@@ -11,4 +11,4 @@ pinia.use(piniaPlugin({
   key: 'pinia'
 }))
 
-createApp(App).use(router).use(pinia).use(elementPlus).mount('#app')
+createApp(App).use(pinia).use(router).use(elementPlus).mount('#app')

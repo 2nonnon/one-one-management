@@ -6,6 +6,7 @@ import orderRoutes from './modules/order'
 import permissionRoutes from './modules/permission'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { useStore } from '../store/store'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -43,8 +44,19 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(() => {
+router.beforeEach((to, from, next) => {
+  const store = useStore()
   nprogress.start()
+  if (to.path === '/login' || store.accessToken) {
+    next()
+  } else {
+    next({
+      path: '/login',
+      query: {
+        redirect: to.path
+      }
+    })
+  }
 })
 
 router.afterEach(() => {
