@@ -6,6 +6,7 @@
     </div>
     <div class="header_right">
       <full-screen />
+      <user-info />
     </div>
   </div>
 </template>
@@ -14,6 +15,7 @@
 import Breadcrumb from './Breadcrumb.vue'
 import ToggleSideBar from './ToggleSideBar.vue'
 import FullScreen from './FullScreen.vue'
+import UserInfo from './UserInfo.vue'
 </script>
 
 <style scoped lang="scss">
