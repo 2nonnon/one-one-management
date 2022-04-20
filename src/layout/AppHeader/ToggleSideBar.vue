@@ -1,5 +1,8 @@
 <template>
-  <div @click="handleCollapse">
+  <div
+    class="header_toggle-icon"
+    @click="handleCollapse"
+  >
     <el-icon v-if="store.isCollapse">
       <expand />
     </el-icon>
@@ -20,5 +23,8 @@ const handleCollapse = () => {
 </script>
 
 <style scoped lang="scss">
-
+.header_toggle-icon {
+  display: flex;
+  align-items: center;
+}
 </style>
