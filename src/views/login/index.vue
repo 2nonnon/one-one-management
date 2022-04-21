@@ -56,7 +56,7 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ILoginForm } from '../../api/types/login'
-import { signin } from '../../api/login'
+import { loginService } from '../../api/login'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '../../store/store'
 
@@ -83,7 +83,7 @@ const handlleSubmit = async (formEl: FormInstance | undefined) => {
     return false
   }
   loading.value = true
-  const data = await signin(loginForm)
+  const data = await loginService.signin(loginForm)
   loading.value = false
   if (data) {
     store.setUsername(loginForm.username)

@@ -1,8 +1,8 @@
 import { RouteRecordRaw, RouterView } from 'vue-router'
 
 const routes: RouteRecordRaw = {
-  path: 'product',
-  name: 'product',
+  path: 'good',
+  name: 'good',
   component: RouterView,
   meta: {
     title: '商品'
@@ -10,32 +10,32 @@ const routes: RouteRecordRaw = {
   children: [
     {
       path: 'list',
-      name: 'product-list',
-      component: () => import('@/views/product/list/index.vue'),
+      name: 'good-list',
+      component: () => import('@/views/good/list/index.vue'),
       meta: {
         title: '商品列表'
       }
     },
     {
-      path: 'classify',
-      name: 'product-classify',
-      component: () => import('@/views/product/classify/index.vue'),
+      path: 'category',
+      name: 'good-category',
+      component: () => import('@/views/good/category/index.vue'),
       meta: {
         title: '商品分类'
       }
     },
     {
       path: 'attr',
-      name: 'product-attr',
-      component: () => import('@/views/product/attr/index.vue'),
+      name: 'good-attr',
+      component: () => import('@/views/good/attr/index.vue'),
       meta: {
         title: '商品规格'
       }
     },
     {
       path: 'reply',
-      name: 'product-reply',
-      component: () => import('@/views/product/reply/index.vue'),
+      name: 'good-reply',
+      component: () => import('@/views/good/reply/index.vue'),
       meta: {
         title: '商品评论'
       }

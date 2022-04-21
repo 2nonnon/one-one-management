@@ -1,18 +1,25 @@
-import { AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
-import request from '../utils/request'
+import BaseHttpService from '../utils/base-http.service'
 import { ILoginForm, ISigninResponse } from './types/login'
 
-export const signin = async (data: ILoginForm) => {
-  let res: AxiosResponse<ISigninResponse, any>
-  try {
-    res = await request.post<ISigninResponse>(
-      '/auth/signin',
-      data
-    )
+class LoginService extends BaseHttpService {
+  async signin (data: ILoginForm): Promise<ISigninResponse | void> {
+    try {
+      const res = await this.post<ISigninResponse>('auth/signin', data)
+      this.signinSuccess()
+      return res.data
+    } catch (error) {
+      this.signinFailed()
+    }
+  }
+
+  signinSuccess () {
     ElMessage.success('登录成功')
-    return res.data
-  } catch (error) {
+  }
+
+  signinFailed () {
     ElMessage.error('账号或密码错误')
   }
 }
+
+export const loginService = new LoginService()

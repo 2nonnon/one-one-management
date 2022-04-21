@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import AppLayout from '@/layout/AppLayout.vue'
-import productRoutes from './modules/product'
-import mediaRoutes from './modules/media'
+import goodRoutes from './modules/good'
 import orderRoutes from './modules/order'
 import permissionRoutes from './modules/permission'
 import nprogress from 'nprogress'
@@ -21,8 +20,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'home',
         component: () => import('../views/Home/index.vue')
       },
-      productRoutes,
-      mediaRoutes,
+      goodRoutes,
       orderRoutes,
       permissionRoutes
     ]

@@ -14,32 +14,32 @@
       <span>首页</span>
     </el-menu-item>
 
-    <el-sub-menu index="/product">
+    <el-sub-menu index="/good">
       <template #title>
         <el-icon>
           <location />
         </el-icon>
         <span>商品</span>
       </template>
-      <el-menu-item index="/product/list">
+      <el-menu-item index="/good/list">
         <el-icon>
           <location />
         </el-icon>
         <span>商品列表</span>
       </el-menu-item>
-      <el-menu-item index="/product/classify">
+      <el-menu-item index="/good/category">
         <el-icon>
           <location />
         </el-icon>
         <span>商品分类</span>
       </el-menu-item>
-      <el-menu-item index="/product/attr">
+      <el-menu-item index="/good/attr">
         <el-icon>
           <location />
         </el-icon>
         <span>商品规格</span>
       </el-menu-item>
-      <el-menu-item index="/product/reply">
+      <el-menu-item index="/good/reply">
         <el-icon>
           <location />
         </el-icon>
@@ -67,13 +67,6 @@
         <span>订单offline</span>
       </el-menu-item>
     </el-sub-menu>
-
-    <el-menu-item index="/media">
-      <el-icon>
-        <location />
-      </el-icon>
-      <span>媒体</span>
-    </el-menu-item>
 
     <el-sub-menu index="/permission">
       <template #title>
