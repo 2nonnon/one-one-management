@@ -3,7 +3,7 @@ import BaseHttpService from '../utils/base-http.service'
 
 class CategoryService extends BaseHttpService {
   async getCategories () {
-    const res = await this.get<ICategories>('categories')
+    const res = await this.get<ICategories[]>('categories')
     return res.data
   }
 
