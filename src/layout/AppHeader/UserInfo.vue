@@ -29,7 +29,6 @@ const store = useStore()
 const handleLogout = () => {
   ElMessageBox.confirm(
     '即将退出系统，是否确认退出？',
-    '提示',
     {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
