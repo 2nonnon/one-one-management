@@ -22,4 +22,7 @@ import AppHeader from './AppHeader/index.vue'
 .el-aside {
   width: auto;
 }
+.el-main {
+  background-color: #f4f4f5;
+}
 </style>

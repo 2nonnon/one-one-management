@@ -9,7 +9,7 @@
   >
     <el-menu-item index="/">
       <el-icon>
-        <location />
+        <home-filled />
       </el-icon>
       <span>首页</span>
     </el-menu-item>
@@ -17,32 +17,20 @@
     <el-sub-menu index="/good">
       <template #title>
         <el-icon>
-          <location />
+          <goods-filled />
         </el-icon>
-        <span>商品</span>
+        <span>商品管理</span>
       </template>
       <el-menu-item index="/good/list">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>商品列表</span>
       </el-menu-item>
       <el-menu-item index="/good/category">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>商品分类</span>
       </el-menu-item>
       <el-menu-item index="/good/attr">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>商品规格</span>
       </el-menu-item>
       <el-menu-item index="/good/reply">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>商品评论</span>
       </el-menu-item>
     </el-sub-menu>
@@ -50,20 +38,14 @@
     <el-sub-menu index="/order">
       <template #title>
         <el-icon>
-          <location />
+          <list />
         </el-icon>
-        <span>订单</span>
+        <span>订单管理</span>
       </template>
       <el-menu-item index="/order/list">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>订单列表</span>
       </el-menu-item>
       <el-menu-item index="/order/offline">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>订单offline</span>
       </el-menu-item>
     </el-sub-menu>
@@ -71,26 +53,17 @@
     <el-sub-menu index="/permission">
       <template #title>
         <el-icon>
-          <location />
+          <user-filled />
         </el-icon>
-        <span>权限</span>
+        <span>权限管理</span>
       </template>
       <el-menu-item index="/permission/role">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>角色</span>
       </el-menu-item>
       <el-menu-item index="/permission/admin">
-        <el-icon>
-          <location />
-        </el-icon>
         <span>管理员</span>
       </el-menu-item>
       <el-menu-item index="/permission/rule">
-        <el-icon>
-          <Location />
-        </el-icon>
         <span>规则</span>
       </el-menu-item>
     </el-sub-menu>
@@ -99,7 +72,7 @@
 
 <script setup lang="ts">
 import { useStore } from '../../store/store'
-import { Location } from '@element-plus/icons-vue'
+import { HomeFilled, GoodsFilled, UserFilled, List } from '@element-plus/icons-vue'
 
 const store = useStore()
 </script>

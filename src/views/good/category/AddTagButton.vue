@@ -29,7 +29,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from 'vue'
 import type { ElInput } from 'element-plus'
-import { categoryService } from '../../../api/category'
 import { Size } from '../../../types/size.enum'
 import { Plus } from '@element-plus/icons-vue'
 
@@ -50,15 +49,11 @@ const showInput = () => {
   })
 }
 
-const emit = defineEmits(['category-change'])
+const emit = defineEmits(['input-confirm'])
 
 const handleInputConfirm = async () => {
   if (inputValue.value) {
-    await categoryService.createCategory({
-      name: inputValue.value,
-      parentId: props.parentId
-    })
-    emit('category-change')
+    emit('input-confirm', inputValue.value, props.parentId)
   }
   inputVisible.value = false
   inputValue.value = ''

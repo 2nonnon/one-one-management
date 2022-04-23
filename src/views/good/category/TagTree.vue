@@ -1,43 +1,64 @@
 <template>
-  <div class="tag_container">
-    <div class="tag_parent">
-      <el-tag
-        closable
-        size="large"
-        :disable-transitions="false"
-        @close="handleClose(data.id)"
-      >
-        {{ data.name }}
-      </el-tag>
-    </div>
-    <div class="tag_children">
-      <el-tag
-        v-for="item in data.children"
-        :key="item.id"
-        :type="typeRandom(typeArr)"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(item.id)"
-      >
-        {{ item.name }}
-      </el-tag>
+  <div class="tagtree_container">
+    <div class="tagtree_header">
       <add-tag-button
-        :parent-id="data.id"
-        text="二级分类"
-        @category-change="emit('category-change')"
+        :size="Size.LARGE"
+        text="一级分类"
+        @input-confirm="handleInputConfirm"
       />
+    </div>
+    <div class="tagtree_body">
+      <div
+        class="tag_container"
+        v-for="item in data"
+        :key="item.id"
+      >
+        <div class="tag_parent">
+          <el-tag
+            closable
+            size="large"
+            :disable-transitions="false"
+            @close="handleClose(item.id)"
+          >
+            {{ item.name }}
+          </el-tag>
+        </div>
+        <div class="tag_children">
+          <el-tag
+            v-for="child in item.children"
+            :key="child.id"
+            :type="typeRandom(typeArr)"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(child.id)"
+          >
+            {{ child.name }}
+          </el-tag>
+          <add-tag-button
+            text="二级分类"
+            :parent-id="item.id"
+            @input-confirm="handleInputConfirm"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ICategories } from '../../../api/types/category'
-import { categoryService } from '../../../api/category'
+
 import AddTagButton from './AddTagButton.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { Size } from '../../../types/size.enum'
+
+interface Tree {
+    id: number,
+    name: string,
+    parentId: number,
+    children?: Tree[]
+}
 
 type Props = {
-    data?: ICategories
+    data: Tree[]
 }
 
 defineProps<Props>()
@@ -60,36 +81,26 @@ const typeRandom = (arr: any[]) => {
   return arr[rand]
 }
 
-const emit = defineEmits(['category-change'])
+const emit = defineEmits(['add-item', 'delete-item'])
 
 const handleClose = (id: number) => {
-  ElMessageBox.confirm(
-    '正在删除分类，删除后不可恢复，确认删除？',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-      buttonSize: 'default'
-    }
-  )
-    .then(async () => {
-      await categoryService.deleteCategory(id)
-      emit('category-change')
-      ElMessage({
-        type: 'success',
-        message: '删除分类成功'
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '已取消删除'
-      })
-    })
+  emit('delete-item', id)
+}
+const handleInputConfirm = (name: string, parentId: number) => {
+  emit('add-item', name, parentId)
 }
 </script>
 
 <style scoped lang="scss">
+.tagtree_header {
+  padding: 20px 0;
+  border-bottom: 2px solid #f4f4f5;
+}
+.tagtree_body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .tag_container {
     padding: 20px 0;
 }

@@ -1,3 +1,4 @@
+import { CreateGoodDto } from './../api/types/good'
 import { defineStore } from 'pinia'
 import { Names } from './store.namespace'
 
@@ -6,7 +7,8 @@ export const useStore = defineStore(Names.Store, {
     return {
       isCollapse: false,
       username: '',
-      accessToken: ''
+      accessToken: '',
+      createGoodDto: {} as CreateGoodDto
     }
   },
   getters: {
