@@ -2,9 +2,10 @@
   <div class="tagtree_container">
     <div class="tagtree_header">
       <add-tag-button
+        v-model="name"
         :size="Size.LARGE"
-        text="一级分类"
-        @input-confirm="handleInputConfirm"
+        :text="levelOne"
+        @input-confirm="handleInputConfirm(0)"
       />
     </div>
     <div class="tagtree_body">
@@ -35,9 +36,9 @@
             {{ child.name }}
           </el-tag>
           <add-tag-button
-            text="二级分类"
-            :parent-id="item.id"
-            @input-confirm="handleInputConfirm"
+            :text="levelTwo"
+            v-model="name"
+            @input-confirm="handleInputConfirm(item.id)"
           />
         </div>
       </div>
@@ -46,9 +47,11 @@
 </template>
 
 <script setup lang="ts">
-
 import AddTagButton from './AddTagButton.vue'
 import { Size } from '../../../types/size.enum'
+import { ref } from 'vue'
+
+const name = ref('')
 
 interface Tree {
     id: number,
@@ -59,9 +62,11 @@ interface Tree {
 
 type Props = {
     data: Tree[]
+    levelOne?: string
+    levelTwo?: string
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), { levelOne: '一级分类', levelTwo: '二级分类' })
 
 enum Types {
     SUCCESS = 'success',
@@ -86,8 +91,8 @@ const emit = defineEmits(['add-item', 'delete-item'])
 const handleClose = (id: number) => {
   emit('delete-item', id)
 }
-const handleInputConfirm = (name: string, parentId: number) => {
-  emit('add-item', name, parentId)
+const handleInputConfirm = (parentId: number) => {
+  emit('add-item', name.value, parentId)
 }
 </script>
 

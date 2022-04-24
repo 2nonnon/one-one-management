@@ -99,18 +99,7 @@ const loadCategories = () => {
 const handleCategoryChange = (value: number[]) => {
   console.log(value)
 }
-// do not use same name with ref
-// const SpuForm = reactive<CreateGoodDto>({
-//   cover_url: '',
-//   market_price: 0,
-//   price: 0,
-//   name: '',
-//   tag: 0,
-//   total_stock: 0,
-//   categories: [],
-//   banner: [],
-//   detail: []
-// })
+
 const SpuForm = store.createGoodDto
 
 watchEffect(() => {

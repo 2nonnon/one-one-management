@@ -5,7 +5,7 @@ export interface IAttribute {
     parentId: number;
   }
 export interface ISku {
-    id: number;
+    id?: number;
     name: string;
     img_url: string;
     market_price: number;
@@ -43,6 +43,7 @@ export interface CreateGoodDto {
     tag: number;
     total_stock: number;
     categories: ICategory[];
+    skus: ISku[];
   }
 export interface IGoodsPage {
     total: number;

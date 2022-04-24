@@ -11,6 +11,7 @@
       :size="size"
       @keyup.enter="handleInputConfirm"
       @blur="handleInputConfirm"
+      @input="handleInput"
     />
     <el-button
       v-else
@@ -32,7 +33,7 @@ import type { ElInput } from 'element-plus'
 import { Size } from '../../../types/size.enum'
 import { Plus } from '@element-plus/icons-vue'
 
-const props = withDefaults(defineProps<{parentId?: number, text: string, size?: Size}>(), { parentId: 0, size: Size.SMALL })
+withDefaults(defineProps<{modelValue: string, text: string, size?: Size}>(), { size: Size.SMALL })
 
 const inputValue = ref('')
 const inputVisible = ref(false)
@@ -49,11 +50,15 @@ const showInput = () => {
   })
 }
 
-const emit = defineEmits(['input-confirm'])
+const emit = defineEmits(['update:modelValue', 'input-confirm'])
 
-const handleInputConfirm = async () => {
+const handleInput = () => {
+  emit('update:modelValue', inputValue.value)
+}
+
+const handleInputConfirm = () => {
   if (inputValue.value) {
-    emit('input-confirm', inputValue.value, props.parentId)
+    emit('input-confirm')
   }
   inputVisible.value = false
   inputValue.value = ''
