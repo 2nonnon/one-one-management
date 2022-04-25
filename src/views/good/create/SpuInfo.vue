@@ -21,14 +21,13 @@
           placeholder="全部商品"
           :options="categories"
           :show-all-levels="false"
-          @focus="loadCategories"
           @change="handleCategoryChange"
           collapse-tags
           clearable
         />
       </el-form-item>
       <el-form-item label="商品标签">
-        <el-radio-group v-model="SpuForm.tag">
+        <el-radio-group v-model="tag">
           <el-radio label="无" />
           <el-radio label="新品" />
           <el-radio label="推荐" />
@@ -61,49 +60,115 @@
       <el-form-item
         label="商品封面图"
       >
-        <upload :limit="1" />
+        <upload
+          :limit="1"
+          @success="handleCoverSuccess"
+          @remove="handleCoverRemove"
+        />
       </el-form-item>
       <el-form-item
         label="商品轮播图"
       >
-        <upload :limit="5" />
+        <upload
+          :limit="5"
+          @success="handleBannerSuccess"
+          @remove="handleBannerRemove"
+        />
       </el-form-item>
       <el-form-item
         label="商品详情图"
       >
-        <upload :limit="10" />
+        <upload
+          :limit="10"
+          @success="handleDetailSuccess"
+          @remove="handleDetailRemove"
+        />
       </el-form-item>
     </el-form>
+    <button @click.prevent="foo">
+      CCCCC
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watchEffect } from 'vue'
 import { categoryService } from '../../../api/category'
 import { ICategories } from '../../../api/types/category'
 import Upload from '../../../components/Upload/index.vue'
 import { useStore } from '../../../store/store'
 
 const store = useStore()
+const SpuForm = store.createGoodDto
 const categories = reactive<ICategories[]>([])
+
+const foo = () => {
+  console.log(SpuForm)
+}
+
+type Status = {
+ readonly '无': 0,
+ readonly '新品': 1,
+ readonly '推荐': 3
+}
+
+const status: Status = {
+  无: 0,
+  新品: 1,
+  推荐: 3
+}
+
+const tag = ref<keyof Status>('无')
 
 const loadCategories = () => {
   if (categories.length === 0) {
     categoryService.getCategories().then((res) => {
+      categories.length = 0
       categories.push(...res)
-      console.log(categories)
     })
   }
 }
 
 const handleCategoryChange = (value: number[]) => {
-  console.log(value)
+  SpuForm.categories = Array.from(new Set(value.flat(1)))
 }
 
-const SpuForm = store.createGoodDto
+const handleCoverSuccess = (res: string) => {
+  SpuForm.cover_url = res
+}
+const handleCoverRemove = () => {
+  SpuForm.cover_url = ''
+}
+const handleBannerSuccess = (res: string) => {
+  if (SpuForm.banner) {
+    SpuForm.banner.push(res)
+  } else {
+    SpuForm.banner = [res]
+  }
+}
+const handleBannerRemove = (res: string) => {
+  const index = SpuForm.banner.indexOf(res)
+  SpuForm.banner.splice(index, 1)
+}
+const handleDetailSuccess = (res: string) => {
+  if (SpuForm.detail) {
+    SpuForm.detail.push(res)
+  } else {
+    SpuForm.detail = [res]
+  }
+}
+const handleDetailRemove = (res: string) => {
+  const index = SpuForm.detail.indexOf(res)
+  SpuForm.detail.splice(index, 1)
+}
 
 watchEffect(() => {
-  console.log(SpuForm.name)
+  SpuForm.tag = status[tag.value]
+})
+
+onMounted(() => {
+  loadCategories()
+  store.resetCreateGoodDto()
 })
 </script>
 

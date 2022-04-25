@@ -1,18 +1,12 @@
 <template>
   <div class="create_container">
-    <div class="create_header">
-      <el-steps
-        :active="active"
-        finish-status="success"
-        align-center
-      >
-        <el-step title="Step 1" />
-        <el-step title="Step 2" />
-        <el-step title="Step 3" />
-      </el-steps>
-    </div>
+    <div class="create_header" />
     <div class="create_body">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
   <div class="creater_footer">
@@ -36,23 +30,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const active = ref(0)
-const map = ['create-spu', 'create-sku']
 
 const hanldeToPre = () => {
-  if (active.value-- < 0) return
   router.push({
-    name: map[active.value]
+    name: 'create-spu'
   })
 }
 const hanldeToNext = () => {
-  if (active.value++ > 2) return
   router.push({
-    name: map[active.value]
+    name: 'create-sku'
   })
 }
 </script>

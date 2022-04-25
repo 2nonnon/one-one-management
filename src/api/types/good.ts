@@ -5,7 +5,7 @@ export interface IAttribute {
     parentId: number;
   }
 export interface ISku {
-    id?: number;
+    id: number;
     name: string;
     img_url: string;
     market_price: number;
@@ -33,6 +33,14 @@ export enum Sort {
     PRICE = 'price',
     PRICE_DES = '-price',
   }
+export interface CreateSkuDto {
+    name: string;
+    img_url: string;
+    market_price: number;
+    price: number;
+    stock: number;
+    attributes: IAttribute[];
+}
 export interface CreateGoodDto {
     cover_url: string;
     banner: string[];
@@ -42,8 +50,8 @@ export interface CreateGoodDto {
     name: string;
     tag: number;
     total_stock: number;
-    categories: ICategory[];
-    skus: ISku[];
+    categories: number[];
+    skus: CreateSkuDto[];
   }
 export interface IGoodsPage {
     total: number;

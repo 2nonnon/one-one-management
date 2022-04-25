@@ -23,6 +23,9 @@ export const useStore = defineStore(Names.Store, {
     },
     setAccessToken (accessToken: string) {
       this.accessToken = accessToken
+    },
+    resetCreateGoodDto () {
+      this.createGoodDto = {} as CreateGoodDto
     }
   }
 })
