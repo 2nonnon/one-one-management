@@ -46,28 +46,7 @@ const routes: RouteRecordRaw = {
       component: () => import('@/views/good/create/index.vue'),
       meta: {
         title: '新增商品'
-      },
-      redirect: {
-        path: 'create/spu'
-      },
-      children: [
-        {
-          path: 'spu',
-          name: 'create-spu',
-          component: () => import('@/views/good/create/SpuInfo.vue'),
-          meta: {
-            title: 'SPU'
-          }
-        },
-        {
-          path: 'sku',
-          name: 'create-sku',
-          component: () => import('@/views/good/create/SkuInfo.vue'),
-          meta: {
-            title: 'SKU'
-          }
-        }
-      ]
+      }
     }
   ]
 }

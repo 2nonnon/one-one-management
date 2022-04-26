@@ -8,6 +8,7 @@ export const useStore = defineStore(Names.Store, {
       isCollapse: false,
       username: '',
       accessToken: '',
+      baseUrl: '',
       createGoodDto: {} as CreateGoodDto
     }
   },

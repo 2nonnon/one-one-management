@@ -1,16 +1,20 @@
 <template>
   <div class="spu_form">
     <el-form
-      :model="SpuForm"
       label-width="120px"
     >
-      <el-form-item label="商品规格">
-        <el-radio-group>
-          <el-radio label="单规格" />
-          <el-radio label="多规格" />
+      <el-form-item
+        label="商品规格"
+      >
+        <el-radio-group v-model="check">
+          <el-radio :label="SkuType.Single" />
+          <el-radio :label="SkuType.Multiple" />
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="选择规格">
+      <el-form-item
+        label="选择规格"
+        v-if="check === SkuType.Multiple"
+      >
         <el-cascader
           size="default"
           :props="{value: 'id', label: 'name', multiple: true}"
@@ -28,11 +32,14 @@
           立即生成
         </el-button>
       </el-form-item>
-      <el-form-item label="详细信息">
+      <el-form-item
+        label="详细信息"
+        v-if="showDetail && check === SkuType.Multiple"
+      >
         <div class="sku_detail_container">
           <div
             class="sku_detail_card"
-            v-for="item in SpuForm.skus"
+            v-for="item in form.skus"
             :key="item.name"
           >
             <el-form
@@ -105,29 +112,43 @@
         </div>
       </el-form-item>
     </el-form>
-    <button @click.prevent="foo">
-      CCCCC
-    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
-import { useStore } from '../../../store/store'
+import { onMounted, reactive, ref } from 'vue'
+// import { useStore } from '../../../store/store'
 import { attributeService } from '../../../api/attribute'
 import Upload from '../../../components/Upload/index.vue'
 import { IAttributes } from '../../../api/types/Attribute'
-import { CreateSkuDto } from '../../../api/types/good'
+import { CreateGoodDto, CreateSkuDto } from '../../../api/types/good'
+// import { goodService } from '../../../api/good'
+// import { useRouter } from 'vue-router'
+
+const props = defineProps<{form: CreateGoodDto}>()
+const emit = defineEmits(['updata:form'])
+
+enum SkuType {
+  Single = '单规格',
+  Multiple = '多规格'
+}
 
 const result: any[] = []
 const attributes = reactive<IAttributes[]>([])
-const store = useStore()
-const SpuForm = store.createGoodDto
-// const SkuForm = reactive<CreateSkuDto[]>([])
+// const store = useStore()
+// const SpuForm = store.createGoodDto
+// const router = useRouter()
+const check = ref<SkuType>(SkuType.Single)
+const showDetail = ref(false)
 
-const foo = () => {
-  console.log(SpuForm)
-}
+// const handleCreateGood = () => {
+//   goodService.createGood(SpuForm).then(res => {
+//     console.log('create', res)
+//     // router.replace({
+//     //   name: 'good-list'
+//     // })
+//   })
+// }
 
 const load = () => {
   attributeService.getAttributes().then((res) => {
@@ -188,25 +209,28 @@ const cartesianProduct = (source: any[][][]) => {
 }
 
 const handleGenerate = () => {
-  SpuForm.skus = []
+  showDetail.value = true
+  // props.form.skus = []
   const attrs = cartesianProduct(result)
-  SpuForm.skus.push(...Array.from({ length: attrs.length }, (_, i) => {
+  // props.skus.push(...Array.from({ length: attrs.length }, (_, i) => {
+  //   const obj = {} as CreateSkuDto
+  //   obj.name = attrs[i].filter((item: any) => item.parentId !== 0).map((item: any) => item.name).join('-')
+  //   obj.market_price = props.market_price
+  //   obj.price = props.price
+  //   obj.attributes = attrs[i]
+  //   return obj
+  // }))
+  const data = Array.from({ length: attrs.length }, (_, i) => {
     const obj = {} as CreateSkuDto
     obj.name = attrs[i].filter((item: any) => item.parentId !== 0).map((item: any) => item.name).join('-')
-    obj.market_price = SpuForm.market_price
-    obj.price = SpuForm.price
+    obj.market_price = props.form.market_price
+    obj.price = props.form.price
     obj.attributes = attrs[i]
     return obj
-  }))
-  console.log(attrs, SpuForm.skus)
+  })
+  emit('updata:form', Object.assign(props.form, { skus: data }))
+  // console.log(attrs, props.skus)
 }
-
-// const handleUploadSuccess = (...arr: any[]) => {
-//   console.log(arr)
-// }
-// const handleUploadRemove = (res: string) => {
-//   console.log(this, res)
-// }
 
 onMounted(() => {
   load()

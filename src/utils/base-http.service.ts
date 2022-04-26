@@ -4,6 +4,8 @@ import { useStore } from '../store/store'
 
 const store = useStore()
 
+store.baseUrl = import.meta.env.VITE_API_BASEURL
+
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASEURL,
   timeout: 30000

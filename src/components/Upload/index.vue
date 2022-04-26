@@ -1,6 +1,6 @@
 <template>
   <el-upload
-    action="http://localhost:5091/upload/file"
+    :action="`${store.baseUrl}/upload/file`"
     :headers="{
       Authorization: `Bearer ${store.accessToken}`
     }"
@@ -66,7 +66,7 @@ const emit = defineEmits(['success', 'remove'])
 
 const handleRemove = (file: UploadFile) => {
   console.log(file, fileList)
-  emit('remove', file.response)
+  emit('remove', `${store.baseUrl}${file.response}`)
   const index = fileList.findIndex(item => item.uid === file.uid)
   fileList.splice(index, 1)
 }
@@ -78,7 +78,7 @@ const handlePictureCardPreview = (file: UploadFile) => {
 }
 
 const handleSuccess = (res: any) => {
-  emit('success', res)
+  emit('success', `${store.baseUrl}${res}`)
 }
 </script>
 

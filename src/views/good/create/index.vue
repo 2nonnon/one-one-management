@@ -2,48 +2,43 @@
   <div class="create_container">
     <div class="create_header" />
     <div class="create_body">
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
+      <spu-info v-model:form="createGoodDto" />
+      <sku-info v-model:form="createGoodDto" />
     </div>
-  </div>
-  <div class="creater_footer">
-    <el-button
-      @click="hanldeToPre"
-      type="primary"
-      plain
-      size="large"
-    >
-      Pre step
-    </el-button>
-    <el-button
-      @click="hanldeToNext"
-      type="primary"
-      plain
-      size="large"
-    >
-      Next step
-    </el-button>
+    <div class="creater_footer">
+      <el-button @click="showInfo">
+        console
+      </el-button>
+      <el-button @click="handleCreateGood">
+        submit
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
+import SpuInfo from './SpuInfo.vue'
+import SkuInfo from './SkuInfo.vue'
+import { CreateGoodDto, CreateSkuDto } from '../../../api/types/good'
+import { reactive } from 'vue'
+import { goodService } from '../../../api/good'
 
-const router = useRouter()
+const createGoodDto = reactive({ skus: ([] as CreateSkuDto[]) } as CreateGoodDto)
+// const router = useRouter()
+const showInfo = () => {
+  console.log(createGoodDto)
+}
 
-const hanldeToPre = () => {
-  router.push({
-    name: 'create-spu'
+const handleCreateGood = () => {
+  goodService.createGood(createGoodDto).then(res => {
+    console.log('create', res)
+    // router.replace({
+    //   name: 'good-list'
+    // })
   })
 }
-const hanldeToNext = () => {
-  router.push({
-    name: 'create-sku'
-  })
-}
+
 </script>
 
 <style scoped lang="scss">

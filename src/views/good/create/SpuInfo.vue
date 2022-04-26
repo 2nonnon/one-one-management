@@ -85,26 +85,24 @@
         />
       </el-form-item>
     </el-form>
-    <button @click.prevent="foo">
-      CCCCC
-    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, toRaw, watch, watchEffect } from 'vue'
 import { categoryService } from '../../../api/category'
 import { ICategories } from '../../../api/types/category'
+import { CreateGoodDto } from '../../../api/types/good'
 import Upload from '../../../components/Upload/index.vue'
-import { useStore } from '../../../store/store'
+// import { useStore } from '../../../store/store'
 
-const store = useStore()
-const SpuForm = store.createGoodDto
+const props = defineProps<{form: CreateGoodDto}>()
+const emit = defineEmits(['updata:form'])
+const SpuForm = reactive({} as CreateGoodDto)
+
+// const store = useStore()
+// const SpuForm = store.createGoodDto
 const categories = reactive<ICategories[]>([])
-
-const foo = () => {
-  console.log(SpuForm)
-}
 
 type Status = {
  readonly '无': 0,
@@ -166,9 +164,13 @@ watchEffect(() => {
   SpuForm.tag = status[tag.value]
 })
 
+watch(SpuForm, () => {
+  emit('updata:form', Object.assign(props.form, toRaw(SpuForm)))
+})
+
 onMounted(() => {
   loadCategories()
-  store.resetCreateGoodDto()
+  // store.resetCreateGoodDto()
 })
 </script>
 

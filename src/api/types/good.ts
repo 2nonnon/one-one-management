@@ -60,6 +60,8 @@ export interface IGoodsPage {
 export interface IGoodDetail extends IGood {
     attributes: { [Propname: string]: string[] };
     skus: ISku[];
+    banner: string[];
+    detail: string[];
   }
 export interface GetGoodsPageDto {
     search?: string;
