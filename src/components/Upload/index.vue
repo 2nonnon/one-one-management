@@ -8,8 +8,10 @@
     list-type="picture-card"
     :auto-upload="true"
     :limit="limit"
-    :file-list="fileList"
+    :file-list="files"
     @success="handleSuccess"
+    class="upload_container"
+    :disabled="limit === files.length"
   >
     <el-icon><Plus /></el-icon>
 
@@ -48,27 +50,26 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue'
 import type { UploadFile, UploadUserFile } from 'element-plus'
 import { useStore } from '../../store/store'
 
 const store = useStore()
 
-defineProps<{limit: number}>()
+withDefaults(defineProps<{limit?: number, files: UploadUserFile[]}>(), {
+  limit: 5,
+  files: () => [] as UploadUserFile[]
+})
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const disabled = ref(false)
-const fileList = reactive<UploadUserFile[]>([])
 
 const emit = defineEmits(['success', 'remove'])
 
 const handleRemove = (file: UploadFile) => {
-  console.log(file, fileList)
   emit('remove', `${store.baseUrl}${file.response}`)
-  const index = fileList.findIndex(item => item.uid === file.uid)
-  fileList.splice(index, 1)
 }
 
 const handlePictureCardPreview = (file: UploadFile) => {
@@ -85,5 +86,8 @@ const handleSuccess = (res: any) => {
 <style scoped lang="scss">
 .dialog_img {
   width: 100%;
+}
+.upload_container :deep(.el-upload-list__item) {
+  justify-content: center;
 }
 </style>

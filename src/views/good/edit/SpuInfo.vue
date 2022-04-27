@@ -1,7 +1,7 @@
 <template>
   <div class="spu_form">
     <el-form
-      :model="SpuForm"
+      :model="data"
       label-width="120px"
     >
       <el-form-item
@@ -9,11 +9,11 @@
       >
         <el-input
           placeholder="请输入商品名称"
-          v-model="SpuForm.name"
+          v-model="data.name"
         />
       </el-form-item>
       <el-form-item
-        label="商品分类"
+        label="选择分类"
       >
         <el-cascader
           size="default"
@@ -25,6 +25,18 @@
           collapse-tags
           clearable
         />
+      </el-form-item>
+      <el-form-item
+        label="商品分类"
+      >
+        <div class="form_tags_container">
+          <el-tag
+            v-for="cate in data.categories"
+            :key="cate.id"
+          >
+            {{ cate.name }}
+          </el-tag>
+        </div>
       </el-form-item>
       <el-form-item label="商品标签">
         <el-radio-group v-model="tag">
@@ -38,7 +50,7 @@
       >
         <el-input
           placeholder="请输入商品售价"
-          v-model="SpuForm.market_price"
+          v-model="data.market_price"
         />
       </el-form-item>
       <el-form-item
@@ -46,7 +58,7 @@
       >
         <el-input
           placeholder="请输入商品原价"
-          v-model="SpuForm.price"
+          v-model="data.price"
         />
       </el-form-item>
       <el-form-item
@@ -54,7 +66,7 @@
       >
         <el-input
           placeholder="请输入商品总库存"
-          v-model="SpuForm.total_stock"
+          v-model="data.total_stock"
         />
       </el-form-item>
       <el-form-item
@@ -93,16 +105,14 @@
 
 <script setup lang="ts">
 import { UploadUserFile } from 'element-plus'
-import { computed, onMounted, reactive, ref, toRaw, watch, watchEffect } from 'vue'
+import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
 import { categoryService } from '../../../api/category'
+import { goodService } from '../../../api/good'
 import { ICategories } from '../../../api/types/category'
-import { CreateGoodDto } from '../../../api/types/good'
+import { IGoodDetail } from '../../../api/types/good'
 import Upload from '../../../components/Upload/index.vue'
 import { urlToUploadUserFile } from '../../../utils/urlToUploadUserFile'
-
-const props = defineProps<{form: CreateGoodDto}>()
-const emit = defineEmits(['updata:form'])
-const SpuForm = reactive({} as CreateGoodDto)
 
 const categories = reactive<ICategories[]>([])
 
@@ -112,21 +122,37 @@ type Status = {
  readonly '推荐': 3
 }
 
+// type TReverse<T> = T extends Record<infer K, any> ? T[K] extends keyof any ? {[P in T[K]]: T[K] extends P ? P : never } : never : never;
+
+// type Test = TReverse<Status>
+
+type Reverse<T> = T extends Record<infer K, any> ? T[K] extends keyof any ? Record<T[K], K> : never : never;
+
+type ReStatus = Reverse<Status>
+
 const status: Status = {
   无: 0,
   新品: 1,
   推荐: 3
 }
 
+const reStatus: ReStatus = {
+  0: '无',
+  1: '新品',
+  3: '推荐'
+}
+
 const tag = ref<keyof Status>('无')
+const route = useRoute()
+const data = reactive({} as IGoodDetail)
 const banner = computed(() => {
-  return SpuForm.banner?.map(urlToUploadUserFile)
+  return data.banner?.map(urlToUploadUserFile)
 })
 const detail = computed(() => {
-  return SpuForm.detail?.map(urlToUploadUserFile)
+  return data.detail?.map(urlToUploadUserFile)
 })
 const cover = computed(() => {
-  return SpuForm.cover_url ? [urlToUploadUserFile(SpuForm.cover_url)] : [] as UploadUserFile[]
+  return data.cover_url ? [urlToUploadUserFile(data.cover_url)] : [] as UploadUserFile[]
 })
 
 const loadCategories = () => {
@@ -139,54 +165,62 @@ const loadCategories = () => {
 }
 
 const handleCategoryChange = (value: number[]) => {
-  SpuForm.categories = Array.from(new Set(value.flat(1)))
+  console.log(value)
 }
 
 const handleCoverSuccess = (res: string) => {
-  SpuForm.cover_url = res
+  data.cover_url = res
 }
 const handleCoverRemove = () => {
-  SpuForm.cover_url = ''
+  data.cover_url = ''
 }
 const handleBannerSuccess = (res: string) => {
-  if (SpuForm.banner) {
-    SpuForm.banner.push(res)
+  if (data.banner) {
+    data.banner.push(res)
   } else {
-    SpuForm.banner = [res]
+    data.banner = [res]
   }
 }
 const handleBannerRemove = (res: string) => {
-  const index = SpuForm.banner.indexOf(res)
-  SpuForm.banner.splice(index, 1)
+  const index = data.banner.indexOf(res)
+  data.banner.splice(index, 1)
 }
 const handleDetailSuccess = (res: string) => {
-  if (SpuForm.detail) {
-    SpuForm.detail.push(res)
+  if (data.detail) {
+    data.detail.push(res)
   } else {
-    SpuForm.detail = [res]
+    data.detail = [res]
   }
 }
 const handleDetailRemove = (res: string) => {
-  const index = SpuForm.detail.indexOf(res)
-  SpuForm.detail.splice(index, 1)
+  const index = data.detail.indexOf(res)
+  data.detail.splice(index, 1)
 }
 
 watchEffect(() => {
-  SpuForm.tag = status[tag.value]
+  data.tag = status[tag.value]
 })
 
-watch(SpuForm, () => {
-  emit('updata:form', Object.assign(props.form, toRaw(SpuForm)))
-})
+const loadGoodData = () => {
+  goodService.getGoodDetailById(route.params.id as string).then(res => {
+    tag.value = reStatus[res.tag as keyof ReStatus]
+    Object.assign(data, res)
+  })
+}
 
 onMounted(() => {
   loadCategories()
-  // store.resetCreateGoodDto()
+  loadGoodData()
 })
 </script>
 
 <style scoped lang="scss">
 .el-input {
     width: 400px;
+}
+.form_tags_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 </style>

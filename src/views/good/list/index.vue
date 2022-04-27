@@ -10,7 +10,7 @@
           新增商品
         </el-button>
       </div>
-      <el-table
+      <!-- <el-table
         class="goodlist_table"
         ref="multipleTableRef"
         :data="goodList"
@@ -45,7 +45,56 @@
             </el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
+      <div class="goodlist_content">
+        <el-card
+          v-for="item in goodList"
+          :key="item.id"
+          class="goodlist_card"
+          shadow="hover"
+        >
+          <el-checkbox
+            :label="item.id"
+            @change="handleCheckedGoodsChange"
+          />
+          <div class="card_image">
+            <img
+              :src="item.cover_url"
+            >
+          </div>
+          <div class="card_content">
+            <div class="card_content_item">
+              <span>商品名称:</span>
+              <span>{{ item.name }}</span>
+            </div>
+            <div class="card_content_item">
+              <span>商品售价:</span>
+              <span>{{ item.market_price }}</span>
+            </div>
+            <div class="card_content_item">
+              <span>商品销量:</span>
+              <span>{{ item.sold }}</span>
+            </div>
+            <div class="card_content_item">
+              <span>商品库存:</span>
+              <span>{{ item.total_stock }}</span>
+            </div>
+          </div>
+          <div class="card_footer">
+            <el-button
+              type="primary"
+              @click="handleToEdit(item.id)"
+            >
+              编辑
+            </el-button>
+          </div>
+        </el-card>
+        <div
+          class="placeholder"
+          v-for="i in ((pageSize - goodList.length) % 3)"
+          :key="i"
+        />
+      </div>
       <el-pagination
         class="goodlist_pagination"
         background
@@ -67,10 +116,11 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(12)
 const total = ref(0)
 const goodList = reactive<IGood[]>([])
 const columns = reactive<string[]>([])
+const checkedGoods = reactive<number[]>([])
 
 const load = (options: GetGoodsPageDto) => {
   goodService.getGoods(options).then((res) => {
@@ -82,19 +132,28 @@ const load = (options: GetGoodsPageDto) => {
   })
 }
 
-const handleSelectionChange = (...params: any[]) => {
-  console.log(params)
+const handleCheckedGoodsChange = (checked: boolean, e: {target: {value: string}}) => {
+  const value = parseInt(e.target.value, 10)
+  if (checked) {
+    checkedGoods.push(value)
+  } else {
+    checkedGoods.splice(checkedGoods.indexOf(value), 1)
+  }
+  console.log(checkedGoods)
 }
 
-const handleEdit = (index: any, row: any) => {
-  console.log(index, row)
-}
-const handleDelete = (index: any, row: any) => {
-  console.log(index, row)
-}
 const handleToCreateGood = () => {
   router.push({
     path: '/good/create'
+  })
+}
+
+const handleToEdit = (goodId: string) => {
+  router.push({
+    name: 'good-edit',
+    params: {
+      id: goodId
+    }
   })
 }
 
@@ -118,10 +177,64 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
   background-color: #fff;
-  padding: 20px;
+  padding: 30px 20px;
   border-radius: 10px;
-      box-shadow: 0px 0px 5px -1px #dedfe0;
+  box-shadow: 0px 0px 5px -1px #dedfe0;
+}
+.goodlist_panel {
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.goodlist_content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  // justify-content: space-evenly;
+}
+.goodlist_card {
+  flex: 1 0 30%;
+  cursor: pointer;
+}
+.placeholder {
+  flex: 1 0 30%;
+}
+.card_image {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+}
+.card_image::after {
+  content: '';
+  display: block;
+  width: 100%;
+  padding-bottom: 100%;
+}
+.card_content {
+  margin-top: 10px
+}
+.card_content_item {
+  font-size: 16px;
+  display: flex;
+  gap: 10px;
+  line-height: 1;
+  span:first-child {
+    flex: 0 0 auto;
+  }
+}
+.card_content_item:not(:last-child) {
+  margin-bottom: 5px;
+}
+.el-checkbox {
+  height: auto;
 }
 </style>

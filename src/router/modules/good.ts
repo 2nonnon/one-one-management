@@ -47,6 +47,14 @@ const routes: RouteRecordRaw = {
       meta: {
         title: '新增商品'
       }
+    },
+    {
+      path: 'edit/:id',
+      name: 'good-edit',
+      component: () => import('@/views/good/edit/index.vue'),
+      meta: {
+        title: '编辑商品'
+      }
     }
   ]
 }

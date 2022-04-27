@@ -9,7 +9,7 @@ class GoodService extends BaseHttpService {
     return res.data
   }
 
-  async getGoodDetailById (id: number) {
+  async getGoodDetailById (id: string) {
     const res = await this.get<IGoodDetail>(`${this.BASE_URL}/detail/${id}`)
     return res.data
   }
