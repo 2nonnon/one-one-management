@@ -87,6 +87,12 @@
             >
               编辑
             </el-button>
+            <el-button
+              type="danger"
+              @click="handleDelete(item.id)"
+            >
+              删除
+            </el-button>
           </div>
         </el-card>
         <div
@@ -113,6 +119,7 @@ import { goodService } from '../../../api/good'
 import { GetGoodsPageDto, IGood } from '../../../api/types/good'
 import ListHeader from './ListHeader.vue'
 import { useRouter } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const router = useRouter()
 const currentPage = ref(1)
@@ -155,6 +162,34 @@ const handleToEdit = (goodId: string) => {
       id: goodId
     }
   })
+}
+const handleDelete = (goodId: string) => {
+  ElMessageBox.confirm(
+    '正在删除，删除后不可恢复，确认删除？',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+      buttonSize: 'default'
+    }
+  )
+    .then(async () => {
+      await goodService.deleteGood(goodId)
+      load({
+        page_size: pageSize.value,
+        current_page: currentPage.value
+      })
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除'
+      })
+    })
 }
 
 watch(currentPage, () => {

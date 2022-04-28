@@ -18,6 +18,10 @@ class GoodService extends BaseHttpService {
     const res = await this.post<IGoodDetail>(`${this.BASE_URL}/create`, form)
     return res.data
   }
+
+  async deleteGood (id: string) {
+    await this.delete<void>(`${this.BASE_URL}/${id}`)
+  }
 }
 
 export const goodService = new GoodService()

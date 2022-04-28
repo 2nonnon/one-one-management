@@ -1,129 +1,52 @@
 <template>
-  <div class="spu_form">
-    <el-form
-      label-width="120px"
-    >
-      <el-form-item
-        label="商品规格"
+  <div class="sku-container">
+    <div class="spu_form">
+      <el-form
+        label-width="120px"
       >
-        <el-radio-group v-model="check">
-          <el-radio :label="SkuType.Single" />
-          <el-radio :label="SkuType.Multiple" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item
-        label="选择规格"
-        v-if="check === SkuType.Multiple"
-      >
-        <el-cascader
-          size="default"
-          :props="{value: 'id', label: 'name', multiple: true}"
-          placeholder="全部商品"
-          :options="attributes"
-          :show-all-levels="false"
-          @change="handleAttributesChange"
-          collapse-tags
-          clearable
-        />
-        <el-button
-          class="generate_btn"
-          @click="handleGenerate"
+        <el-form-item
+          label="商品规格"
         >
-          立即生成
-        </el-button>
-      </el-form-item>
-      <el-form-item
-        label="详细信息"
-      >
-        <div class="sku_detail_container">
-          <div
-            class="sku_detail_card"
-            v-for="item in data.skus"
-            :key="item.name"
-          >
-            <el-form
-              :model="item"
-              label-width="70px"
-            >
-              <el-form-item
-                label="商品名称"
-              >
-                <el-input
-                  placeholder="请输入商品名称"
-                  v-model="item.name"
-                />
-              </el-form-item>
-              <el-form-item
-                label="商品规格"
-              >
-                <div class="form_tags_container">
-                  <el-tag
-                    v-for="attr in item.attributes"
-                    :key="attr.id"
-                  >
-                    {{ attr.name }}
-                  </el-tag>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="售价"
-              >
-                <el-input
-                  placeholder="请输入商品售价"
-                  v-model="item.market_price"
-                />
-              </el-form-item>
-              <el-form-item
-                label="原价"
-              >
-                <el-input
-                  placeholder="请输入商品原价"
-                  v-model="item.price"
-                />
-              </el-form-item>
-              <el-form-item
-                label="库存"
-              >
-                <el-input
-                  placeholder="请输入商品库存"
-                  v-model="item.stock"
-                />
-              </el-form-item>
-              <el-form-item
-                label="商品图"
-              >
-                <upload
-                  :limit="1"
-                  :files="item.img_url ? [urlToUploadUserFile(item.img_url)] : []"
-                  @success="(res) => {item.img_url = res}"
-                  @remove="() => {item.img_url = ''}"
-                />
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  class="delete_btn"
-                  type="danger"
-                >
-                  删除商品
-                </el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-        </div>
-      </el-form-item>
-    </el-form>
+          <el-radio-group v-model="check">
+            <el-radio :label="SkuType.Single" />
+            <el-radio :label="SkuType.Multiple" />
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="选择规格"
+          v-if="check === SkuType.Multiple"
+        >
+          <attr-part
+            @generate-skus="handleGenerateSkus"
+          />
+        </el-form-item>
+        <el-form-item
+          label="详细信息"
+        >
+          <sku-part v-model:skus="data.skus" />
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="sku-container_footer">
+      <el-button @click="showInfo">
+        console
+      </el-button>
+      <el-button @click="handleUpdateGood">
+        submit
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watchEffect } from 'vue'
 import { attributeService } from '../../../api/attribute'
-import Upload from '../../../components/Upload/index.vue'
 import { IAttributes } from '../../../api/types/Attribute'
-import { IGoodDetail } from '../../../api/types/good'
+import { CreateSkuDto, IGoodDetail, UpdateGoodSkuDto } from '../../../api/types/good'
 import { useRoute } from 'vue-router'
 import { goodService } from '../../../api/good'
-import { urlToUploadUserFile } from '../../../utils/urlToUploadUserFile'
+import SkuPart from '../create/SkuPart.vue'
+import AttrPart from '../create/AttrPart.vue'
 
 enum SkuType {
   Single = '单规格',
@@ -133,14 +56,8 @@ enum SkuType {
 const attributes = reactive<IAttributes[]>([])
 const check = ref<SkuType>(SkuType.Single)
 const route = useRoute()
-const data = reactive({} as IGoodDetail)
-
-const handleAttributesChange = (...args: any[]) => {
-  console.log(args)
-}
-const handleGenerate = (...args: any[]) => {
-  console.log(args)
-}
+const data = reactive({ skus: [] as CreateSkuDto[] } as UpdateGoodSkuDto)
+const GoodInfo = reactive({} as IGoodDetail)
 
 const loadAttributes = () => {
   attributeService.getAttributes().then((res) => {
@@ -151,9 +68,43 @@ const loadAttributes = () => {
 
 const loadGoodData = () => {
   goodService.getGoodDetailById(route.params.id as string).then(res => {
-    Object.assign(data, res)
+    Object.assign(GoodInfo, res)
+    data.id = res.id
+    data.hasSku = res.hasSku
+    data.skus = res.skus
+    if (data.hasSku) {
+      check.value = SkuType.Multiple
+    }
   })
 }
+
+const handleGenerateSkus = (skus: CreateSkuDto[]) => {
+  data.skus.push(...skus.filter(sku => {
+    if (data.skus.every(item => item.attributes.map(_ => _.id).join('-') !== sku.attributes.map(_ => _.id).join('-'))) {
+      sku.market_price = GoodInfo.market_price
+      sku.price = GoodInfo.price
+      return true
+    } else {
+      return false
+    }
+  }))
+}
+
+const showInfo = () => {
+  console.log(data)
+}
+
+const handleUpdateGood = () => {
+  console.log(data)
+}
+
+watchEffect(() => {
+  data.total_stock = data.skus?.reduce((res, item) => res + item.stock, 0)
+})
+
+watchEffect(() => {
+  data.hasSku = check.value === SkuType.Multiple
+})
 
 onMounted(() => {
   loadAttributes()

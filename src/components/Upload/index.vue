@@ -16,7 +16,7 @@
     <el-icon><Plus /></el-icon>
 
     <template #file="{ file }">
-      <div>
+      <div class="el-upload-list__item-container">
         <img
           class="el-upload-list__item-thumbnail"
           :src="file.url"
@@ -89,5 +89,9 @@ const handleSuccess = (res: any) => {
 }
 .upload_container :deep(.el-upload-list__item) {
   justify-content: center;
+}
+.el-upload-list__item-container {
+  width: 100%;
+  height: 100%;
 }
 </style>
