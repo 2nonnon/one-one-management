@@ -17,7 +17,7 @@ class CategoryService extends BaseHttpService {
   }
 
   async updateCategory (data: CreateCategoryDto) {
-    const res = await this.post<ICategory>('categories', data)
+    const res = await this.patch<ICategory>('categories', data)
     return res.data
   }
 }
