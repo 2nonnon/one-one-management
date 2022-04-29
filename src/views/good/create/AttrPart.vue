@@ -9,10 +9,15 @@
       @change="handleAttributesChange"
       collapse-tags
       clearable
-    />
+      ref="cascader"
+    >
+      <template #default="{ node }">
+        <span>{{ nodeValue(node, attrs as number[]) }}</span>
+      </template>
+    </el-cascader>
     <el-button
       class="generate_btn"
-      @click="handleGenerate"
+      @click="handleGenerate(result)"
     >
       立即生成
     </el-button>
@@ -20,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { ElCascader } from 'element-plus'
+import { onMounted, reactive, ref } from 'vue'
 import { attributeService } from '../../../api/attribute'
 import { IAttributes } from '../../../api/types/Attribute'
 import { CreateSkuDto } from '../../../api/types/good'
@@ -29,6 +35,22 @@ const emit = defineEmits(['generate-skus'])
 
 const attributes = reactive<IAttributes[]>([])
 
+defineProps<{attrs?: number[]}>()
+
+// 初始化级联选择器，手动激活商品已有分类
+const cascader = ref<typeof ElCascader | null>(null)
+const nodeValue = (node: any, currentNodes: number[]): boolean => {
+  if (!node.isLeaf && currentNodes?.includes(node.value)) {
+    // if (!node.checked && !node.indeterminate) node.indeterminate = true
+    node.children.forEach((child: any) => {
+      if (currentNodes?.includes(child.value) && !child.checked) {
+        cascader.value?.handleSuggestionClick(child)
+      }
+    })
+  }
+  return node.label
+}
+
 const load = () => {
   attributeService.getAttributes().then((res) => {
     attributes.length = 0
@@ -36,17 +58,23 @@ const load = () => {
   })
 }
 
-const result: any[] = []
+const result = reactive<any[]>([])
 const handleAttributesChange = (value: [number, number][]) => {
   result.length = 0
+  result.push(...value)
+  console.log(result)
+}
+
+const getTree = (source: [number, number][]) => {
   const map = new Map<number, [number, number][]>()
-  value.forEach(item => {
+  source.forEach(item => {
     if (!map.has(item[0])) {
       map.set(item[0], [item])
     } else {
       map.get(item[0])!.push(item)
     }
   })
+  const res: any[] = []
   attributes.forEach(item => {
     if (map.has(item.id)) {
       const children = item.children
@@ -66,10 +94,10 @@ const handleAttributesChange = (value: [number, number][]) => {
         }
         return []
       })
-      result.push(tmp)
+      res.push(tmp)
     }
   })
-  console.log(result)
+  return res
 }
 
 const cartesianProduct = (source: any[][][]) => {
@@ -88,9 +116,10 @@ const cartesianProduct = (source: any[][][]) => {
   return result
 }
 
-const handleGenerate = () => {
-  if (result.length === 0) return
-  const attrs = cartesianProduct(result)
+const handleGenerate = (source: any[]) => {
+  if (source.length === 0) return
+  const tree = getTree(source)
+  const attrs = cartesianProduct(tree)
   const data = Array.from({ length: attrs.length }, (_, i) => {
     const obj = {} as CreateSkuDto
     obj.name = attrs[i].filter((item: any) => item.parentId !== 0).map((item: any) => item.name).join('-')

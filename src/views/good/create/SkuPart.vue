@@ -70,6 +70,7 @@
           <el-button
             class="delete_btn"
             type="danger"
+            @click="handleDeleteSku(item)"
           >
             删除商品
           </el-button>
@@ -80,11 +81,38 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessageBox, ElMessage } from 'element-plus'
 import { CreateSkuDto } from '../../../api/types/good'
 import Upload from '../../../components/Upload/index.vue'
 import { urlToUploadUserFile } from '../../../utils/urlToUploadUserFile'
 
 defineProps<{skus: CreateSkuDto[]}>()
+const emit = defineEmits(['delete-sku'])
+
+const handleDeleteSku = (sku: CreateSkuDto) => {
+  ElMessageBox.confirm(
+    '正在删除，删除后不可恢复，确认删除？',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+      buttonSize: 'default'
+    }
+  )
+    .then(() => {
+      emit('delete-sku', sku)
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除'
+      })
+    })
+}
 
 </script>
 

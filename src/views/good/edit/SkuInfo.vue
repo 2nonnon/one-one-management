@@ -17,13 +17,18 @@
           v-if="check === SkuType.Multiple"
         >
           <attr-part
+            :attrs="attrs"
             @generate-skus="handleGenerateSkus"
           />
         </el-form-item>
         <el-form-item
           label="详细信息"
+          v-if="data.skus.length > 0"
         >
-          <sku-part v-model:skus="data.skus" />
+          <sku-part
+            v-model:skus="data.skus"
+            @delete-sku="handleDeleteSku"
+          />
         </el-form-item>
       </el-form>
     </div>
@@ -31,7 +36,7 @@
       <el-button @click="showInfo">
         console
       </el-button>
-      <el-button @click="handleUpdateGood">
+      <el-button @click="handleUpdateGoodSku">
         submit
       </el-button>
     </div>
@@ -39,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
 import { attributeService } from '../../../api/attribute'
 import { IAttributes } from '../../../api/types/Attribute'
 import { CreateSkuDto, IGoodDetail, UpdateGoodSkuDto } from '../../../api/types/good'
@@ -58,6 +63,10 @@ const check = ref<SkuType>(SkuType.Single)
 const route = useRoute()
 const data = reactive({ skus: [] as CreateSkuDto[] } as UpdateGoodSkuDto)
 const GoodInfo = reactive({} as IGoodDetail)
+
+const attrs = computed(() => {
+  return GoodInfo.skus.map(sku => [sku.id, ...sku.attributes.map(_ => _.id)]).flat(1)
+})
 
 const loadAttributes = () => {
   attributeService.getAttributes().then((res) => {
@@ -91,15 +100,26 @@ const handleGenerateSkus = (skus: CreateSkuDto[]) => {
 }
 
 const showInfo = () => {
+  console.log(GoodInfo)
   console.log(data)
 }
 
-const handleUpdateGood = () => {
-  console.log(data)
+const handleUpdateGoodSku = () => {
+  goodService.updateGoodSku(data.id, data).then(res => {
+    console.log('UpdateGoodSku', res)
+  })
+}
+
+const handleDeleteSku = (sku: CreateSkuDto) => {
+  const index = data.skus.findIndex(item => item.attributes.map(_ => _.id).join('-') === sku.attributes.map(_ => _.id).join('-'))
+  data.skus.splice(index, 1)
 }
 
 watchEffect(() => {
-  data.total_stock = data.skus?.reduce((res, item) => res + item.stock, 0)
+  data.total_stock = data.skus.reduce((res, cur) => {
+    // v-model 双向绑定 el-input 更新的值类型都是string
+    return res + parseInt((cur.stock || 0) as unknown as string, 10)
+  }, 0)
 })
 
 watchEffect(() => {

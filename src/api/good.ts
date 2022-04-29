@@ -1,4 +1,4 @@
-import { CreateGoodDto, GetGoodsPageDto, IGoodDetail, IGoodsPage } from './types/good'
+import { CreateGoodDto, GetGoodsPageDto, IGoodDetail, IGoodsPage, UpdateGoodSkuDto, UpdateGoodSpuDto } from './types/good'
 import BaseHttpService from '../utils/base-http.service'
 
 class GoodService extends BaseHttpService {
@@ -21,6 +21,16 @@ class GoodService extends BaseHttpService {
 
   async deleteGood (id: string) {
     await this.delete<void>(`${this.BASE_URL}/${id}`)
+  }
+
+  async updateGoodSpu (id: string, form: UpdateGoodSpuDto) {
+    const res = await this.patch<IGoodDetail>(`${this.BASE_URL}/${id}/spu`, form)
+    return res.data
+  }
+
+  async updateGoodSku (id: string, form: UpdateGoodSkuDto) {
+    const res = await this.patch<IGoodDetail>(`${this.BASE_URL}/${id}/sku`, form)
+    return res.data
   }
 }
 

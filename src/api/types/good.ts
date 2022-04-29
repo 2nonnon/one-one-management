@@ -1,9 +1,6 @@
+import { IAttribute, IAttributes } from './Attribute'
 import { ICategory } from './category'
-export interface IAttribute {
-    id: number;
-    name: string;
-    parentId: number;
-}
+
 export interface ISku {
     id: number;
     name: string;
@@ -62,7 +59,7 @@ export interface IGoodsPage {
     goods: IGood[];
 }
 export interface IGoodDetail extends IGood {
-    attributes: { [Propname: string]: string[] };
+    attributes: IAttributes;
     skus: ISku[];
     banner: string[];
     detail: string[];

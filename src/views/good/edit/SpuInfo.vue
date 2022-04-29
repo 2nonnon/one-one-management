@@ -53,6 +53,7 @@
           <el-input
             placeholder="请输入商品售价"
             v-model="data.market_price"
+            type="number"
           />
         </el-form-item>
         <el-form-item
@@ -61,6 +62,7 @@
           <el-input
             placeholder="请输入商品原价"
             v-model="data.price"
+            type="number"
           />
         </el-form-item>
         <el-form-item
@@ -69,6 +71,7 @@
           <el-input
             placeholder="请输入商品总库存"
             v-model="data.total_stock"
+            type="number"
           />
         </el-form-item>
         <el-form-item
@@ -107,7 +110,7 @@
       <el-button @click="showInfo">
         console
       </el-button>
-      <el-button @click="handleUpdateGood">
+      <el-button @click="handleUpdateGoodSpu">
         submit
       </el-button>
     </div>
@@ -223,8 +226,10 @@ const showInfo = () => {
   console.log(data)
 }
 
-const handleUpdateGood = () => {
-  console.log(cascader.value)
+const handleUpdateGoodSpu = () => {
+  goodService.updateGoodSpu(data.id, data).then(res => {
+    console.log('updateGoodSpu', res)
+  })
 }
 
 watchEffect(() => {
