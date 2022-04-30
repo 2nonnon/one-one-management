@@ -1,6 +1,6 @@
 import { ElMessage } from 'element-plus'
 import BaseHttpService from '../utils/base-http.service'
-import { ILoginForm, ISigninResponse } from './types/login'
+import { ILoginForm, ISigninResponse } from './types/login.type'
 
 class LoginService extends BaseHttpService {
   async signin (data: ILoginForm): Promise<ISigninResponse | void> {

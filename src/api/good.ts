@@ -1,4 +1,4 @@
-import { CreateGoodDto, GetGoodsPageDto, IGoodDetail, IGoodsPage, UpdateGoodSkuDto, UpdateGoodSpuDto } from './types/good'
+import { CreateGoodDto, GetGoodsPageDto, IGoodDetail, IGoodsPage, UpdateGoodSkuDto, UpdateGoodSpuDto } from './types/good.type'
 import BaseHttpService from '../utils/base-http.service'
 
 class GoodService extends BaseHttpService {

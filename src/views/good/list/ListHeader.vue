@@ -59,13 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { categoryService } from '../../../api/category'
-import { ICategories } from '../../../api/types/category'
+import { ICategories } from '../../../api/types/category.type'
 import { Search } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElCascader } from 'element-plus'
-import { Sort } from '../../../api/types/good'
+import { Sort } from '../../../api/types/good.type'
 
 const route = useRoute()
 const router = useRouter()
@@ -124,7 +124,7 @@ const handleCategoryChange = () => {
   }
 }
 
-watchEffect(() => {
+watch(sort, () => {
   router.push({
     path: '/good/list',
     query: Object.assign({}, route.query, { sort: sort.value })

@@ -1,4 +1,4 @@
-import { CreateGoodDto } from './../api/types/good'
+import { CreateGoodDto } from '../api/types/good.type'
 import { defineStore } from 'pinia'
 import { Names } from './store.namespace'
 

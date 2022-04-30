@@ -1,4 +1,4 @@
-import { IAttributes, CreateAttributeDto, IAttribute } from './types/Attribute'
+import { IAttributes, CreateAttributeDto, IAttribute } from './types/attribute.type'
 import BaseHttpService from '../utils/base-http.service'
 
 class AttributeService extends BaseHttpService {

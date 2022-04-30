@@ -102,7 +102,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
 import { goodService } from '../../../api/good'
-import { GetGoodsPageDto, IGood, Sort } from '../../../api/types/good'
+import { GetGoodsPageDto, IGood, Sort } from '../../../api/types/good.type'
 import ListHeader from './ListHeader.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'

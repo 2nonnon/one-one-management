@@ -1,4 +1,4 @@
-import { ICategories, CreateCategoryDto, ICategory } from './types/category'
+import { ICategories, CreateCategoryDto, ICategory } from './types/category.type'
 import BaseHttpService from '../utils/base-http.service'
 
 class CategoryService extends BaseHttpService {

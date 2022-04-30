@@ -1,5 +1,5 @@
-import { IAttribute, IAttributes } from './Attribute'
-import { ICategory } from './category'
+import { IAttribute, IAttributes } from './attribute.type'
+import { ICategory } from './category.type'
 
 export interface ISku {
     id: number;

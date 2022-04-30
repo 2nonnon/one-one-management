@@ -14,7 +14,7 @@
 import { onMounted, reactive } from 'vue'
 import { attributeService } from '../../../api/attribute'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { IAttributes } from '../../../api/types/Attribute'
+import { IAttributes } from '../../../api/types/attribute.type'
 import TagTree from '../category/TagTree.vue'
 
 const data = reactive<IAttributes[]>([])
