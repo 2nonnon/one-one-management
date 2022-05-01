@@ -1,10 +1,10 @@
 <template>
-  <div class="goodlist_header">
-    <div class="goodlist_header_title">
+  <div class="list-header">
+    <div class="list-header_title">
       数据筛选
     </div>
-    <div class="goodlist_header_content">
-      <div class="goodlist_header_item">
+    <div class="list-header_content">
+      <div class="list-header_item">
         <div class="item_title">
           商品搜索
         </div>
@@ -21,7 +21,7 @@
           搜索
         </el-button>
       </div>
-      <div class="goodlist_header_item">
+      <div class="list-header_item">
         <div class="item_title">
           商品分类
         </div>
@@ -40,7 +40,7 @@
           </template>
         </el-cascader>
       </div>
-      <div class="goodlist_header_item">
+      <div class="list-header_item">
         <div class="item_title">
           商品排序
         </div>
@@ -139,21 +139,21 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.goodlist_header {
+.list-header {
     margin-bottom: 20px;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 5px -1px #dedfe0;
 }
-.goodlist_header_title {
+.list-header_title {
     font-weight: bold;
     margin-bottom: 20px;
 }
-.goodlist_header_item + .goodlist_header_item {
+.list-header_item + .list-header_item {
     margin-top: 10px;
 }
-.goodlist_header_item {
+.list-header_item {
     display: flex;
     align-items: center;
     gap: 10px;
