@@ -17,6 +17,14 @@ const routes: RouteRecordRaw = {
       }
     },
     {
+      path: 'detail/:id',
+      name: 'order-detail',
+      component: () => import('@/views/order/detail/index.vue'),
+      meta: {
+        title: '订单详情'
+      }
+    },
+    {
       path: 'offline',
       name: 'order-offline',
       component: () => import('@/views/order/offline/index.vue'),
