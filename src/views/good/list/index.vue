@@ -1,8 +1,8 @@
 <template>
-  <div class="goodlist_container">
+  <div class="goodlist-container">
     <list-header />
-    <div class="goodlist_body">
-      <div class="goodlist_panel">
+    <div class="goodlist-body">
+      <div class="goodlist-panel">
         <el-button
           type="primary"
           @click="handleToCreateGood"
@@ -22,11 +22,11 @@
           全不选
         </el-button>
       </div>
-      <div class="goodlist_content">
+      <div class="goodlist-content">
         <el-card
           v-for="item in goodList"
           :key="item.id"
-          class="goodlist_card"
+          class="goodlist-card"
           shadow="hover"
         >
           <el-checkbox
@@ -88,7 +88,7 @@
         />
       </div>
       <el-pagination
-        class="goodlist_pagination"
+        class="goodlist-pagination"
         background
         :page-size="pageSize"
         v-model:current-page="currentPage"
@@ -212,7 +212,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.goodlist_body {
+.goodlist-body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,23 +222,23 @@ onMounted(() => {
   border-radius: 10px;
   box-shadow: 0px 0px 5px -1px #dedfe0;
 }
-.goodlist_panel {
+.goodlist-panel {
   padding: 0 20px;
   width: 100%;
   box-sizing: border-box;
 }
-.goodlist_content {
+.goodlist-content {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   // justify-content: space-evenly;
 }
-.goodlist_card {
+.goodlist-card {
   flex: 1 0 30%;
   cursor: pointer;
 }
-.goodlist_card :deep(.el-card__body) {
+.goodlist-card :deep(.el-card__body) {
   height: 100%;
   box-sizing: border-box;
   display: flex;
