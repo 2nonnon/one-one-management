@@ -6,7 +6,7 @@ export const useStore = defineStore(Names.Store, {
   state: () => {
     return {
       isCollapse: false,
-      username: '',
+      account: '',
       accessToken: '',
       baseUrl: '',
       createGoodDto: {} as CreateGoodDto
@@ -19,8 +19,8 @@ export const useStore = defineStore(Names.Store, {
     toggleCollapse () {
       this.isCollapse = !this.isCollapse
     },
-    setUsername (username: string) {
-      this.username = username
+    setAccount (account: string) {
+      this.account = account
     },
     setAccessToken (accessToken: string) {
       this.accessToken = accessToken

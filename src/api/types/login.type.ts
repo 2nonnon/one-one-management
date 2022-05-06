@@ -1,5 +1,5 @@
 export interface ILoginForm {
-    username: string
+    account: string
     password: string
 }
 

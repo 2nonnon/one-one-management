@@ -14,13 +14,13 @@
         one-one
       </div>
       <el-form-item
-        prop="username"
+        prop="account"
       >
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.account"
           type="text"
           autocomplete="off"
-          placeholder="请输入用户名"
+          placeholder="请输入账号"
           :prefix-icon="User"
         />
       </el-form-item>
@@ -55,7 +55,7 @@
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ILoginForm } from '../../api/types/login'
+import { ILoginForm } from '../../api/types/login.type'
 import { loginService } from '../../api/login'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '../../store/store'
@@ -67,7 +67,7 @@ const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
 
 const loginForm = reactive<ILoginForm>({
-  username: 'wolegequ',
+  account: 'wolegequ',
   password: 'wQ12.dd'
 })
 
@@ -86,7 +86,7 @@ const handlleSubmit = async (formEl: FormInstance | undefined) => {
   const data = await loginService.signin(loginForm)
   loading.value = false
   if (data) {
-    store.setUsername(loginForm.username)
+    store.setAccount(loginForm.account)
     store.setAccessToken(data.accessToken)
 
     let redirect = route.query.redirect
