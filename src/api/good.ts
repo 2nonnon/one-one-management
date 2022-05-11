@@ -9,7 +9,7 @@ class GoodService extends BaseHttpService {
     return res.data
   }
 
-  async getGoodDetailById (id: string) {
+  async getGoodDetailById (id: number) {
     const res = await this.get<IGoodDetail>(`${this.BASE_URL}/detail/${id}`)
     return res.data
   }
@@ -19,16 +19,16 @@ class GoodService extends BaseHttpService {
     return res.data
   }
 
-  async deleteGood (id: string) {
+  async deleteGood (id: number) {
     await this.delete<void>(`${this.BASE_URL}/${id}`)
   }
 
-  async updateGoodSpu (id: string, form: UpdateGoodSpuDto) {
+  async updateGoodSpu (id: number, form: UpdateGoodSpuDto) {
     const res = await this.patch<IGoodDetail>(`${this.BASE_URL}/${id}/spu`, form)
     return res.data
   }
 
-  async updateGoodSku (id: string, form: UpdateGoodSkuDto) {
+  async updateGoodSku (id: number, form: UpdateGoodSkuDto) {
     const res = await this.patch<IGoodDetail>(`${this.BASE_URL}/${id}/sku`, form)
     return res.data
   }

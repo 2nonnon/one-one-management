@@ -143,7 +143,7 @@ const goBack = () => {
   router.back()
 }
 
-const load = (id: string) => {
+const load = (id: number) => {
   orderService.getOrderById(id).then(res => {
     Object.assign(data, res)
     console.log(res)
@@ -151,7 +151,7 @@ const load = (id: string) => {
 }
 
 onMounted(() => {
-  load(route.params.id as string)
+  load(parseInt(route.params.id as string, 10))
 })
 </script>
 

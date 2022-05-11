@@ -35,6 +35,15 @@
       </el-menu-item>
     </el-sub-menu>
 
+    <el-menu-item index="/notice">
+      <template #title>
+        <el-icon>
+          <bell-filled />
+        </el-icon>
+        <span>公告管理</span>
+      </template>
+    </el-menu-item>
+
     <el-sub-menu index="/order">
       <template #title>
         <el-icon>
@@ -45,9 +54,6 @@
       <el-menu-item index="/order/list">
         <span>订单列表</span>
       </el-menu-item>
-      <el-menu-item index="/order/offline">
-        <span>订单offline</span>
-      </el-menu-item>
     </el-sub-menu>
 
     <el-sub-menu index="/permission">
@@ -55,16 +61,13 @@
         <el-icon>
           <user-filled />
         </el-icon>
-        <span>权限管理</span>
+        <span>用户管理</span>
       </template>
-      <el-menu-item index="/permission/role">
-        <span>角色</span>
+      <el-menu-item index="/permission/user">
+        <span>用户管理</span>
       </el-menu-item>
       <el-menu-item index="/permission/admin">
-        <span>管理员</span>
-      </el-menu-item>
-      <el-menu-item index="/permission/rule">
-        <span>规则</span>
+        <span>管理员管理</span>
       </el-menu-item>
     </el-sub-menu>
   </el-menu>
@@ -72,7 +75,7 @@
 
 <script setup lang="ts">
 import { useStore } from '../../store/store'
-import { HomeFilled, GoodsFilled, UserFilled, List } from '@element-plus/icons-vue'
+import { HomeFilled, GoodsFilled, UserFilled, List, BellFilled } from '@element-plus/icons-vue'
 
 const store = useStore()
 </script>

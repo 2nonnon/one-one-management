@@ -46,8 +46,8 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
 import { attributeService } from '../../../api/attribute'
-import { IAttributes } from '../../../api/types/Attribute'
-import { CreateSkuDto, IGoodDetail, UpdateGoodSkuDto } from '../../../api/types/good'
+import { IAttributes } from '../../../api/types/attribute.type'
+import { CreateSkuDto, IGoodDetail, UpdateGoodSkuDto } from '../../../api/types/good.type'
 import { useRoute } from 'vue-router'
 import { goodService } from '../../../api/good'
 import SkuPart from '../create/SkuPart.vue'
@@ -76,7 +76,7 @@ const loadAttributes = () => {
 }
 
 const loadGoodData = () => {
-  goodService.getGoodDetailById(route.params.id as string).then(res => {
+  goodService.getGoodDetailById(parseInt(route.params.id as string, 10)).then(res => {
     Object.assign(GoodInfo, res)
     data.id = res.id
     data.hasSku = res.hasSku

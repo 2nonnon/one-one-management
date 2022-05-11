@@ -123,8 +123,8 @@ import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { categoryService } from '../../../api/category'
 import { goodService } from '../../../api/good'
-import { ICategories } from '../../../api/types/category'
-import { IGoodDetail, UpdateGoodSpuDto } from '../../../api/types/good'
+import { ICategories } from '../../../api/types/category.type'
+import { IGoodDetail, UpdateGoodSpuDto } from '../../../api/types/good.type'
 import Upload from '../../../components/Upload/index.vue'
 import { urlToUploadUserFile } from '../../../utils/urlToUploadUserFile'
 
@@ -237,7 +237,7 @@ watchEffect(() => {
 })
 
 const loadGoodData = () => {
-  goodService.getGoodDetailById(route.params.id as string).then((res: Partial<IGoodDetail>) => {
+  goodService.getGoodDetailById(parseInt(route.params.id as string, 10)).then((res: Partial<IGoodDetail>) => {
     tag.value = reStatus[res.tag as keyof ReStatus]
     const tmp = res.categories
     delete res.skus

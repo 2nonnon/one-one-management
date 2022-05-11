@@ -7,6 +7,9 @@ const routes: RouteRecordRaw = {
   meta: {
     title: '商品管理'
   },
+  redirect: {
+    name: 'good-list'
+  },
   children: [
     {
       path: 'list',

@@ -7,6 +7,9 @@ const routes: RouteRecordRaw = {
   meta: {
     title: '订单管理'
   },
+  redirect: {
+    name: 'order-list'
+  },
   children: [
     {
       path: 'list',

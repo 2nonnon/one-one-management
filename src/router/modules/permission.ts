@@ -5,7 +5,10 @@ const routes: RouteRecordRaw = {
   name: 'permission',
   component: RouterView,
   meta: {
-    title: '权限管理'
+    title: '用户管理'
+  },
+  redirect: {
+    name: 'permission-user'
   },
   children: [
     {
@@ -14,6 +17,14 @@ const routes: RouteRecordRaw = {
       component: () => import('@/views/permission/role/index.vue'),
       meta: {
         title: '角色管理'
+      }
+    },
+    {
+      path: 'user',
+      name: 'permission-user',
+      component: () => import('@/views/permission/user/index.vue'),
+      meta: {
+        title: '用户管理'
       }
     },
     {

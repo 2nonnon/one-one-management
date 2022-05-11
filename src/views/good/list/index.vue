@@ -147,7 +147,7 @@ const handleToCreateGood = () => {
   })
 }
 
-const handleToEdit = (goodId: string) => {
+const handleToEdit = (goodId: number) => {
   router.push({
     name: 'good-edit',
     params: {
@@ -169,7 +169,7 @@ const generateConfig = (): GetGoodsPageDto => {
   return config
 }
 
-const handleDelete = (goodId: string) => {
+const handleDelete = (goodId: number) => {
   ElMessageBox.confirm(
     '正在删除，删除后不可恢复，确认删除？',
     {

@@ -20,6 +20,14 @@ const routes: Array<RouteRecordRaw> = [
         name: 'home',
         component: () => import('../views/Home/index.vue')
       },
+      {
+        path: 'notice',
+        name: 'notice',
+        component: () => import('../views/notice/index.vue'),
+        meta: {
+          title: '公告管理'
+        }
+      },
       goodRoutes,
       orderRoutes,
       permissionRoutes

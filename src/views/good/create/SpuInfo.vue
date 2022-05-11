@@ -95,8 +95,8 @@
 import { UploadUserFile } from 'element-plus'
 import { computed, onMounted, reactive, ref, toRaw, watch, watchEffect } from 'vue'
 import { categoryService } from '../../../api/category'
-import { ICategories } from '../../../api/types/category'
-import { CreateGoodDto } from '../../../api/types/good'
+import { ICategories } from '../../../api/types/category.type'
+import { CreateGoodDto } from '../../../api/types/good.type'
 import Upload from '../../../components/Upload/index.vue'
 import { urlToUploadUserFile } from '../../../utils/urlToUploadUserFile'
 

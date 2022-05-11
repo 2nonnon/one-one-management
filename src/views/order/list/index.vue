@@ -135,7 +135,7 @@ const handleUncheckAll = () => {
   })
 }
 
-const handleToOrderDetail = (id: string) => {
+const handleToOrderDetail = (id: number) => {
   router.push({
     name: 'order-detail',
     params: {
