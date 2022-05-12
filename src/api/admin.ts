@@ -14,12 +14,12 @@ class AdminService extends BaseHttpService {
     return res.data
   }
 
-  async deleteAdmin (id: number) {
+  async deleteAdmin (id: string) {
     await this.delete<void>(`${this.BASE_URL}/${id}`)
   }
 
-  async updateAdmin (data: UpdateAdminDto) {
-    const res = await this.patch<IAdmin>(this.BASE_URL, data)
+  async updateAdmin (id: string, data: UpdateAdminDto) {
+    const res = await this.patch<IAdmin>(`${this.BASE_URL}/${id}`, data)
     return res.data
   }
 }

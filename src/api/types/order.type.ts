@@ -22,6 +22,8 @@ export interface IOrder {
     id: number;
     receive_info: string;
     paid: number;
+    remark: string;
+    freight: number;
     status: OrderStatus;
     create_time: string;
     paid_time: string;

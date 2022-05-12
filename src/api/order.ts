@@ -23,6 +23,11 @@ class OrderService extends BaseHttpService {
       const res = await this.patch<IOrder>(`${this.BASE_URL}/${id}/receive`, data)
       return res.data
     }
+
+    async sendOrder (id: number) {
+      const res = await this.patch<IOrder>(`${this.BASE_URL}/${id}/send`)
+      return res.data
+    }
 }
 
 export const orderService = new OrderService()

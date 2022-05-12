@@ -69,7 +69,10 @@
           </div>
           <div class="orderlist-card_detail">
             <span class="orderlist-card_status">{{ statusMap[item.status] }}</span>
-            <span @click="handleToOrderDetail(item.id)">订单详情</span>
+            <span
+              class="orderlist-card_link"
+              @click="handleToOrderDetail(item.id)"
+            >订单详情</span>
           </div>
         </el-card>
       </div>
@@ -93,6 +96,7 @@ import ListHeader from './ListHeader.vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const statusMap = {
+  [OrderStatus.Pre]: '已关闭',
   [OrderStatus.HAS_CLOSED]: '已关闭',
   [OrderStatus.TO_DEAL]: '未收货',
   [OrderStatus.TO_PAID]: '未支付',
@@ -261,6 +265,10 @@ onMounted(() => {
 }
 .orderlist-card_total {
   font-size: 20px;
+}
+.orderlist-card_link {
+  color: #0080ff;
+  cursor: pointer;
 }
 .el-checkbox {
   height: 100px;

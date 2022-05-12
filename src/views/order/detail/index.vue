@@ -16,40 +16,67 @@
             </el-icon>
           </div>
           <div class="progress-item__subtitle">
-            {{ data.create_time }}
+            {{ getParseDate(parseInt(data.create_time, 10)) }}
           </div>
         </div>
-        <div class="progress-item progress-item--current">
+        <div
+          class="progress-item"
+          :class="{ 'progress-item--current': !data.paid_time, 'progress-item--prev': data.paid_time}"
+        >
           <div class="progress-item__progress">
             <span class="progress-item__title">付款</span>
-            <el-icon size="15px">
+            <el-icon
+              size="15px"
+              v-if="data.paid_time"
+            >
               <Select />
             </el-icon>
           </div>
-          <div class="progress-item__subtitle">
-            {{ data.paid_time }}
+          <div
+            class="progress-item__subtitle"
+            v-if="data.paid_time"
+          >
+            {{ getParseDate(parseInt(data.paid_time, 10)) }}
           </div>
         </div>
-        <div class="progress-item progress-item--next">
+        <div
+          class="progress-item"
+          :class="{ 'progress-item--current': data.paid_time && !data.send_time, 'progress-item--prev': data.send_time, 'progress-item--next': !data.paid_time}"
+        >
           <div class="progress-item__progress">
             <span class="progress-item__title">发货</span>
-            <el-icon size="15px">
+            <el-icon
+              size="15px"
+              v-if="data.send_time"
+            >
               <Select />
             </el-icon>
           </div>
-          <div class="progress-item__subtitle">
-            {{ data.send_time }}
+          <div
+            class="progress-item__subtitle"
+            v-if="data.send_time"
+          >
+            {{ getParseDate(parseInt(data.send_time, 10)) }}
           </div>
         </div>
-        <div class="progress-item progress-item--next">
+        <div
+          class="progress-item"
+          :class="{ 'progress-item--current': data.send_time && !data.deal_time, 'progress-item--prev': data.deal_time, 'progress-item--next': !data.send_time}"
+        >
           <div class="progress-item__progress">
             <span class="progress-item__title">确认收货</span>
-            <el-icon size="15px">
+            <el-icon
+              size="15px"
+              v-if="data.deal_time"
+            >
               <Select />
             </el-icon>
           </div>
-          <div class="progress-item__subtitle">
-            {{ data.deal_time }}
+          <div
+            class="progress-item__subtitle"
+            v-if="data.deal_time"
+          >
+            {{ getParseDate(parseInt(data.deal_time, 10)) }}
           </div>
         </div>
       </div>
@@ -81,14 +108,14 @@
         </div>
         <div class="card_status">
           <p class="ft-md">
-            等待付款
+            {{ `￥${item.market_price}` }}
           </p>
         </div>
       </div>
       <div class="order-detail__goods-footer">
         <div class="order-detail__goods-labels">
-          <p>运费：</p>
-          <p>需付款：</p>
+          <p>运费：{{ `￥${data.freight}` }}</p>
+          <p>需付款：{{ `￥${data.paid}` }}</p>
         </div>
         <div class="order-detail__goods-prices" />
       </div>
@@ -108,8 +135,10 @@
           <button
             type="button"
             class="order-detail__change-btn button button--primary button--s button--plain"
+            @click="handleToSend"
+            v-if="data.paid_time"
           >
-            修改地址
+            确认发货
           </button>
         </div>
       </div>
@@ -122,7 +151,7 @@
         </p>
       </div>
       <p class="order-detail__footer-comment">
-        无
+        {{ data.remark ?? '无' }}
       </p>
     </div>
   </div>
@@ -134,6 +163,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { orderService } from '../../../api/order'
 import { IOrder } from '../../../api/types/order.type'
 import { LocationInformation, EditPen, Select } from '@element-plus/icons-vue'
+import { getParseDate } from '../../../utils/getParseDate'
 
 const route = useRoute()
 const router = useRouter()
@@ -147,6 +177,12 @@ const load = (id: number) => {
   orderService.getOrderById(id).then(res => {
     Object.assign(data, res)
     console.log(res)
+  })
+}
+
+const handleToSend = () => {
+  orderService.sendOrder(data.id).then(res => {
+    load(res.id)
   })
 }
 

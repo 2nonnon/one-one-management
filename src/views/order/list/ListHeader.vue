@@ -31,6 +31,10 @@
           size="default"
         >
           <el-option
+            label="全部订单"
+            value=""
+          />
+          <el-option
             v-for="item in statusItems"
             :key="item"
             :label="statusMap[item]"
@@ -52,6 +56,7 @@ const route = useRoute()
 const router = useRouter()
 const search = ref('')
 const statusMap = {
+  [OrderStatus.Pre]: '已关闭',
   [OrderStatus.HAS_CLOSED]: '已关闭',
   [OrderStatus.TO_DEAL]: '未收货',
   [OrderStatus.TO_PAID]: '未支付',
